@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: walmart_date_dim
+    description: "Static date dimension table for calendar and holiday tracking (SCD1)."
+    columns:
+      - name: date_id
+        description: "Surrogate key for the date record."
+        tests:
+          - unique
+          - not_null
+
+      - name: store_date
+        description: "Transaction date."
+        tests:
+          - not_null
+
+  - name: walmart_store_dim
+    description: "Store and department dimension table (SCD1)."
+    columns:
+      - name: store_id
+        description: "Store identifier."
+        tests:
+          - not_null
+
+      - name: store_type
+        description: "Store type classification."
+
+  - name: walmart_fact_table
+    description: "Transactional fact table capturing weekly sales, markdowns, and economic indicators (SCD2)."
+    columns:
+      - name: store_id
+        description: "Foreign key reference to store_id."
+        tests:
+          - not_null
+
+      - name: store_weekly_sales
+        description: "Weekly sales total."
+
+      - name: vrsn_start_date
+        description: "SCD2 effective start timestamp."
+        tests:
+          - not_null

@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: int_walmart_sales_joined
+    description: "Silver intermediate table joining Walmart weekly sales facts with store metadata."
+    columns:
+      - name: store_id
+        description: "Store identifier number."
+        tests:
+          - not_null
+
+      - name: date
+        description: "Transaction week date."
+        tests:
+          - not_null
+
+      - name: store_type
+        description: "Store type classification from stores table."
