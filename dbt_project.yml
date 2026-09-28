@@ -1,0 +1,40 @@
+name: 'dbt_walmart_e2e_project'
+version: '1.0.0'
+config-version: 2
+
+profile: 'default'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Model Configurations
+models:
+  dbt_walmart_e2e_project:
+    # 1. Bronze Layer: Direct staging views over Snowflake RAW tables
+    bronze:
+      +schema: bronze
+      +materialized: view
+
+    # 2. Silver Layer: Cleansed intermediate transformations & joined models
+    silver:
+      +schema: silver
+      +materialized: view  # Use 'table' if performance on intermediate joins requires persistence
+
+    # 3. Gold Layer: Final SCD1 Dimension target tables
+    gold:
+      +schema: gold
+      +materialized: incremental
+
+# Snapshot Configurations: Final SCD2 Fact target table
+snapshots:
+  dbt_walmart_e2e_project:
+    +target_schema: gold
